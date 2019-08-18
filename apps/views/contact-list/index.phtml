@@ -17,6 +17,7 @@ Email <input type="text" name="email"/><br/>
 		echo $contact->first_name . "<br/>";
 		echo $contact->last_name . "<br/>";
 		echo $contact->email . "<br/>";
+		echo "<a href='/contact-list/remove/" . $contact->id . "'>Remove</a><br/>";
 		echo "<br/><br/>";
 	}
 ?>

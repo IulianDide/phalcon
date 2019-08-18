@@ -39,4 +39,24 @@ class ContactListController extends Controller
 			//var_dump($contactEntity);
         }
 	}
+	
+	public function removeAction(int $id)
+	{
+		$contact = Contact::findFirst($id);
+		if ($contact !== false) {
+			if ($contact->delete() === false) {
+				echo "Sorry, we can't delete the contact right now: \n";
+
+				$messages = $contact->getMessages();
+
+				foreach ($messages as $message) {
+					echo $message, "\n";
+				}
+			} else {
+				echo 'The contact was deleted successfully!';
+			}
+		} else {
+			echo 'The contact was not found';
+		}
+	}
 }
