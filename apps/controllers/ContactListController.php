@@ -17,17 +17,14 @@ class ContactListController extends Controller
 		 // Check if request has made with POST
         if ($this->request->isPost()) {
             // Access POST data
-            $contact['first-name'] = $this->request->getPost('first-name');
-            $contact['last-name'] = $this->request->getPost('last-name');
-            $contact['email'] = $this->request->getPost('email');
-			$contactEntity = new Contact();
-			$contactEntity->first_name = $this->request->getPost('first-name');
-            $contactEntity->last_name = $this->request->getPost('last-name');
-            $contactEntity->email = $this->request->getPost('email');
-			if ($contactEntity->create() === false) {
+			$contact = new Contact();
+			$contact->first_name = $this->request->getPost('first-name');
+            $contact->last_name = $this->request->getPost('last-name');
+            $contact->email = $this->request->getPost('email');
+			if ($contact->create() === false) {
 				echo "Umh, We can't store contact right now: \n";
 
-				$messages = $contactEntity->getMessages();
+				$messages = $contact->getMessages();
 
 				foreach ($messages as $message) {
 					echo $message, "\n";
@@ -35,9 +32,9 @@ class ContactListController extends Controller
 			} else {
 				echo 'Great, a new contact was created successfully!';
 			}
-			//var_dump($contact);
-			//var_dump($contactEntity);
         }
+		
+		$this->dispatcher->forward(['action' => 'index']);
 	}
 	
 	public function removeAction(int $id)
@@ -58,5 +55,34 @@ class ContactListController extends Controller
 		} else {
 			echo 'The contact was not found';
 		}
+		
+		$this->dispatcher->forward(['action' => 'index']);
+	}
+	
+	public function updateAction(int $id)
+	{
+		if ($this->request->isPost()) {
+			$contact = Contact::findFirst($id);
+			if ($contact !== false) {
+				$contact->first_name = $this->request->getPost('first-name');
+				$contact->last_name = $this->request->getPost('last-name');
+				$contact->email = $this->request->getPost('email');
+				if ($contact->save() === false) {
+					echo "Sorry, we can't update the contact right now: \n";
+
+					$messages = $contact->getMessages();
+
+					foreach ($messages as $message) {
+						echo $message, "\n";
+					}
+				} else {
+					echo 'The contact was updated successfully!';
+				}
+			} else {
+				echo 'The contact was not found';
+			}
+		}
+		
+		$this->dispatcher->forward(['action' => 'index']);
 	}
 }

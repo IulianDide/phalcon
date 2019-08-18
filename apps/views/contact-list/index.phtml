@@ -1,23 +1,36 @@
-<h1>Welcome</h1>
-
-<form action="/contact-list/add" method="post">
-First Name <input type="text" name="first-name"/><br/>
-Last Name <input type="text" name="last-name"/><br/>
-Email <input type="text" name="email"/><br/>
-<button type="submit" name="add" value="Add">Add</button>
-</form>
-
-
-<h1>
-    Contacts
-</h1>
-
-<?php 
-	foreach ($contacts as $contact) {
-		echo $contact->first_name . "<br/>";
-		echo $contact->last_name . "<br/>";
-		echo $contact->email . "<br/>";
-		echo "<a href='/contact-list/remove/" . $contact->id . "'>Remove</a><br/>";
-		echo "<br/><br/>";
-	}
-?>
+<table border="1px" border-collapse="1">
+	<tr>
+		<th>Id</th>
+		<th>First Name</th>
+		<th>Last Name</th>
+		<th>Email</th>
+		<th>Date Created</th>
+		<th>Actions</th>
+	</tr>
+	<tr>
+		<form action="/contact-list/add" method="post">
+			<td></td>
+			<td><input type="text" name="first-name"/></td>
+			<td><input type="text" name="last-name"/></td>
+			<td><input type="text" name="email"/></td>
+			<td></td>
+			<td><button type="submit" name="add" value="Add">Add</button></td>
+		</form>
+	</tr>
+	
+	<?php foreach ($contacts as $contact) { ?>
+		<tr>
+		<form action="/contact-list/update/<?php echo $contact->id; ?>" method="post">
+			<td><?php echo $contact->id; ?></td>
+			<td><input type="text" name="first-name" value="<?php echo $contact->first_name; ?>"/></td>
+			<td><input type="text" name="last-name" value="<?php echo $contact->last_name; ?>"/></td>
+			<td><input type="text" name="email" value="<?php echo $contact->email; ?>"/></td>
+			<td><?php echo $contact->creation_date; ?></td>
+			<td>
+				<button type="submit" name="update" value="update">Update</button>
+				<a href='/contact-list/remove/<?php echo $contact->id; ?>'>Remove</a>
+			</td>
+		</form>
+	</tr>
+	<?php } ?>
+</table>
